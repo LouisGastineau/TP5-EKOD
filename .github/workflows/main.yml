@@ -11,7 +11,7 @@ jobs:
     name: Build & Deploy Backend
     runs-on: ubuntu-latest
     env:
-      SVC_ID: my-service-id
+      SVC_ID: 988390be-2413-4cff-b822-d6dc6b523f31
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
     steps:
       - name: Checkout code
