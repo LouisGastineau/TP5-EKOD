@@ -10,7 +10,6 @@ jobs:
   backend:
     name: Build & Deploy Backend
     runs-on: ubuntu-latest
-    container: ghcr.io/railwayapp/cli:latest
     env:
       SVC_ID: my-service-id
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
@@ -20,6 +19,9 @@ jobs:
 
       - name: Build Docker image
         run: docker build . --file Dockerfile --tag my-image-name:${GITHUB_SHA}
+
+      - name: Set up Railway CLI
+        run: curl -fsSL https://railway.app/install.sh | sh
 
       - name: Deploy to Railway
         run: railway up --service=${{ env.SVC_ID }} 
@@ -33,15 +35,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
-      - name: Deploy to netlify
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './dist'
+          publish-dir: ./dist
           production-branch: master
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
           enable-pull-request-comment: false
           enable-commit-comment: true
           overwrites-pull-request-comment: true
+
     
