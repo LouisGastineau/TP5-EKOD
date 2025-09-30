@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        run: docker build . --file Dockerfile --tag my-image-name:${GITHUB_SHA}
+        run: docker build . --file .backend/Dockerfile --tag my-image-name:${GITHUB_SHA}
 
       - name: Set up Railway CLI
         run: curl -fsSL https://railway.app/install.sh | sh
